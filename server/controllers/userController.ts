@@ -62,6 +62,7 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
         // compare inputed password to hashed password on db and do something
         if(user && checkPassword){
             res.status(200).json({
+                success: true,
                 id: user.id,
                 name: user.name,
                 email: user.email
