@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import userModels from "../models/userModels";
 import bcrypt from "bcryptjs"
+import jwt from "jsonwebtoken"
 
 // get all users
 export const getUsers = async (req: Request, res: Response, next: NextFunction) => {
@@ -42,7 +43,8 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
             user: {
                 id: newUser._id,
                 name: newUser.name,
-                email: newUser.email
+                email: newUser.email,
+                token: generateToken(newUser._id.toString())
             }
         })
 
@@ -65,7 +67,8 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
                 success: true,
                 id: user.id,
                 name: user.name,
-                email: user.email
+                email: user.email,
+                token: generateToken(user.id)
             })
         }
 
@@ -76,5 +79,13 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
     } catch (error) {
         next(error)
     }
+}
+
+
+// generate jwt
+const generateToken = (id: String) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET || "", {
+        expiresIn: "30d"
+    })
 }
 
