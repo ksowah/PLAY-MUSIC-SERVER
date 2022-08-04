@@ -4,9 +4,8 @@ import PostMessage from "../models/postModel"
 
 export const getPosts = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const postMessages = await PostMessage.find()
+        const postMessages = await PostMessage.find({user: req.user.email})
         res.status(200).json(postMessages)
-        console.log(req.headers["authorization"]);
         
     } catch (error) {
         next(error)
