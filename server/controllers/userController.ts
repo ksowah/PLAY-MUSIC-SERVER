@@ -32,19 +32,26 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
         const salt = bcrypt.genSaltSync(10)
         const hashedPassword = bcrypt.hashSync(password, salt)
 
+        let token = generateToken(email)
+        console.log(token.refreshToken)
+        
         const newUser = await userModels.create({
             name,
             email,
-            password: hashedPassword
+            password: hashedPassword,
+            token: token.refreshToken
         })
 
+        
+        // add refresh token to cookies
+        res.cookie("jwt", token.refreshToken, {httpOnly: true, maxAge: 24 * 60 * 60 * 1000})
         res.status(200).json({
             success: true,
             user: {
                 id: newUser._id,
                 name: newUser.name,
                 email: newUser.email,
-                token: generateToken(newUser._id.toString())
+                token: token.accessToken
             }
         })
 
@@ -62,13 +69,15 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
         const checkPassword = user && await bcrypt.compare(password, user.password)
  
         // compare inputed password to hashed password on db and do something
+        let token = generateToken(email)
         if(user && checkPassword){
+            res.cookie("jwt", token.refreshToken, {httpOnly: true, sameSite: "none", secure: true, maxAge: 24 * 60 * 60 * 1000})
             res.status(200).json({
                 success: true,
                 id: user.id,
                 name: user.name,
                 email: user.email,
-                token: generateToken(user.id)
+                token: token.accessToken
             })
         }
 
@@ -83,9 +92,15 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
 
 
 // generate jwt
-const generateToken = (id: String) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET || "", {
-        expiresIn: "30d"
+const generateToken = (email: String) => {
+    const accessToken = jwt.sign({ email }, process.env.JWT_SECRET || "", {
+        expiresIn: "5m"
     })
+
+    const refreshToken = jwt.sign({ email }, process.env.JWT_REFRESH_SECRET || "", {
+        expiresIn: "1d"
+    })
+
+    return {accessToken, refreshToken}
 }
 
