@@ -5,6 +5,8 @@ import connectDB from "./config/db"
 import postRouter from "./routes/postRoutes.routes"
 import errorHandler from "./middleware/errorHandler"
 import userRouter from "./routes/userRoutes.routes"
+import cookieParser from "cookie-parser"
+import refreshRouter from "./routes/refreshToken.routes"
 
 dotenv.config()
 
@@ -14,8 +16,10 @@ const app  = express()
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded())
+app.use(cookieParser())
 app.use("/posts", postRouter)
 app.use("/users", userRouter)
+app.use("/refresh", refreshRouter)
 app.use(errorHandler)
 
 
