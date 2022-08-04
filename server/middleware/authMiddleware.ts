@@ -17,7 +17,7 @@ const protect = async (req: Request, res: Response, next: NextFunction) => {
         const decoded: any = jwt.verify(token || "", process.env.JWT_SECRET || "")
         console.log(decoded)
         
-        req.user = await userModel.findById(decoded.id)
+        req.user = await userModel.findOne({email: decoded.email})
         next()
         
     } catch (error) {
