@@ -7,6 +7,7 @@ import errorHandler from "./middleware/errorHandler"
 import userRouter from "./routes/userRoutes.routes"
 import cookieParser from "cookie-parser"
 import refreshRouter from "./routes/refreshToken.routes"
+import logoutRouter from "./routes/logOut.routes"
 
 dotenv.config()
 
@@ -20,6 +21,7 @@ app.use(cookieParser())
 app.use("/posts", postRouter)
 app.use("/users", userRouter)
 app.use("/refresh", refreshRouter)
+app.use("/logout", logoutRouter)
 app.use(errorHandler)
 
 
