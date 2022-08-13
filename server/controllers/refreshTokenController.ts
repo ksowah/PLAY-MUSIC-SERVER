@@ -15,7 +15,6 @@ export const getRefreshedToken = async (req: Request, res: Response, next: NextF
     const refreshToken = cookies.jwt
     console.log("refresh >>>",refreshToken);
     const user = await userModels.findOne({token: refreshToken})
-    console.log(user);
     
     if(!user) {
         console.log("no user found");
@@ -30,9 +29,14 @@ export const getRefreshedToken = async (req: Request, res: Response, next: NextF
             return res.sendStatus(403)
         } // forbidden
         // now generate a new access token
-        const accessToken = jwt.sign({email: decoded.email}, process.env.JWT_SECRET || "", {expiresIn: "30s"})  
+        const accessToken = jwt.sign({email: decoded.email}, process.env.JWT_SECRET || "", {expiresIn: "5m"})  
         res.json({
             success: true,
+            user: {
+                name: user.name,
+                email: user.email,
+                id: user.id
+            },
             token: accessToken,
             message: "new token generated"
         })  
