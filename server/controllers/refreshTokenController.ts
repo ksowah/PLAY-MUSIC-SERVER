@@ -5,7 +5,13 @@ import jwt from "jsonwebtoken"
 export const getRefreshedToken = async (req: Request, res: Response, next: NextFunction) => {
    try {
     const cookies = req.cookies
-    if(!cookies?.jwt) return res.sendStatus(401)
+    console.log(cookies)
+    
+    if(!cookies?.jwt){ 
+        console.log("There is no cookies")
+        
+        return res.sendStatus(401)
+    }
     const refreshToken = cookies.jwt
     console.log("refresh >>>",refreshToken);
     const user = await userModels.findOne({token: refreshToken})
