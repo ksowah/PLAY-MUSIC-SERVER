@@ -44,7 +44,7 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
 
         
         // add refresh token to cookies
-        res.cookie("jwt", token.refreshToken, {httpOnly: true, maxAge: 24 * 60 * 60 * 1000})
+        res.cookie("jwt", token.refreshToken, {httpOnly: true, sameSite: "none", secure: false, maxAge: 24 * 60 * 60 * 1000})
         res.status(200).json({
             success: true,
             user: {
@@ -71,7 +71,8 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
         // compare inputed password to hashed password on db and do something
         let token = generateToken(email)
         if(user && checkPassword){
-            res.cookie("jwt", token.refreshToken, {httpOnly: true, sameSite: "none", secure: true, maxAge: 24 * 60 * 60 * 1000})
+            res.cookie("jwt", user.token, {httpOnly: true, sameSite: "none", secure: true})
+           
             res.status(200).json({
                 success: true,
                 id: user.id,
@@ -82,7 +83,7 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
         }
 
         if(!checkPassword){
-            throw new Error("Invalid inputs")
+            throw new Error("Password is incorrect")
         }
 
     } catch (error) {
