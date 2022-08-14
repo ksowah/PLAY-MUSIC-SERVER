@@ -17,6 +17,10 @@ const userSchema = new mongoose.Schema({
     token: {
         type: String,
         required: [true, "Not authorized"]
+    },
+    image: {
+        type: String,
+        default: "https://ksets.netlify.app/play/profile.png"
     }
 })
 
