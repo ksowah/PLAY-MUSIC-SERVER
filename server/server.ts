@@ -2,7 +2,7 @@ import express from "express"
 import cors from "cors"
 import dotenv from "dotenv"
 import connectDB from "./config/db"
-import postRouter from "./routes/postRoutes.routes"
+import postRouter from "./routes/songRoutes.routes"
 import errorHandler from "./middleware/errorHandler"
 import userRouter from "./routes/userRoutes.routes"
 import cookieParser from "cookie-parser"
@@ -18,7 +18,7 @@ app.use(cors({credentials: true, origin: true}))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser())
-app.use("/posts", postRouter)
+app.use("/songs", postRouter)
 app.use("/users", userRouter)
 app.use("/refresh", refreshRouter)
 app.use("/logout", logoutRouter)
