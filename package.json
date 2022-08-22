@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "ts-node dist/server.js",
+    "start": "node dist/server.js",
     "server": "nodemon server.ts",
     "tsc": "./node_modules/typescript/bin/tsc",
     "build": "tsc",
