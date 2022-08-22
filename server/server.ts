@@ -1,6 +1,5 @@
 import express from "express"
 import cors from "cors"
-import dotenv from "dotenv"
 import connectDB from "./config/db"
 import postRouter from "./routes/songRoutes.routes"
 import errorHandler from "./middleware/errorHandler"
@@ -8,8 +7,7 @@ import userRouter from "./routes/userRoutes.routes"
 import cookieParser from "cookie-parser"
 import refreshRouter from "./routes/refreshToken.routes"
 import logoutRouter from "./routes/logOut.routes"
-
-dotenv.config()
+import {config} from "./config"
 
 connectDB()
 
@@ -24,8 +22,5 @@ app.use("/refresh", refreshRouter)
 app.use("/logout", logoutRouter)
 app.use(errorHandler)
 
-
-const PORT = process.env.PORT || 5000
-
-app.listen(PORT, () => console.log(`⛈️ ⚡ server running on port ${PORT}`))
+app.listen(config.server.port, () => console.log(`⛈️ ⚡ server running on port ${config.server.port}`))
 
