@@ -12,7 +12,7 @@ import {config} from "./config"
 connectDB()
 
 const app  = express()
-app.use(cors({credentials: true, origin: "*"}))
+app.use(cors({credentials: true, origin: true, allowedHeaders: "*"}))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
