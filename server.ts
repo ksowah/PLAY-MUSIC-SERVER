@@ -8,11 +8,13 @@ import cookieParser from "cookie-parser"
 import refreshRouter from "./routes/refreshToken.routes"
 import logoutRouter from "./routes/logOut.routes"
 import {config} from "./config"
+import corsOrigin from "./middleware/corsOrigin"
 
 connectDB()
 
 const app  = express()
-app.use(cors({credentials: true, origin: true, allowedHeaders: "*"}))
+app.use(cors({credentials: true, origin: true}))
+app.use(corsOrigin)
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
